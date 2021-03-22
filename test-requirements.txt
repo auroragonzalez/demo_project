@@ -12,6 +12,5 @@ pytest
 pytest-cov
 
 numpy
-keras.models
-keras.layers
+keras
 pandas
