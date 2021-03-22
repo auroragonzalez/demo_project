@@ -10,3 +10,8 @@ testtools>=1.4.0
 
 pytest
 pytest-cov
+
+numpy
+keras.models
+keras.layers
+pandas
