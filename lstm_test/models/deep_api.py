@@ -101,6 +101,24 @@ def _fields_to_dict(fields_in):
     return dict_out
 
 
+def split_sequences(sequences, n_steps):
+    """
+    Function to prepare the input of the neural network having n_steps as the number of observations that will be used in each multivariate series as an input of the model
+    :return:
+    """
+	X, y = list(), list()
+	for i in range(len(sequences)):
+		# find the end of this pattern
+		end_ix = i + n_steps
+		# check if we are beyond the dataset
+		if end_ix > len(sequences)-1:
+			break
+		# gather input and output parts of the pattern
+		seq_x, seq_y = sequences[i:end_ix, :], sequences[end_ix, :]
+		X.append(seq_x)
+		y.append(seq_y)
+	return array(X), array(y)
+
 def get_metadata():
     """
     Function to read metadata
