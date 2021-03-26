@@ -1,9 +1,9 @@
-A demo project
+lstm_test
 ==============================
 
-[![Build Status](https://jenkins.indigo-datacloud.eu/buildStatus/icon?job=Pipeline-as-code/DEEP-OC-org/demo_project/master)](https://jenkins.indigo-datacloud.eu/job/Pipeline-as-code/job/DEEP-OC-org/job/demo_project/job/master)
+[![Build Status](https://jenkins.indigo-datacloud.eu/buildStatus/icon?job=Pipeline-as-code/DEEP-OC-org/lstm_test/master)](https://jenkins.indigo-datacloud.eu/job/Pipeline-as-code/job/DEEP-OC-org/job/lstm_test/job/master)
 
-A demo project using DEEP Data Science template
+LSTM test
 
 Project Organization
 ------------
@@ -31,9 +31,9 @@ Project Organization
     │                             generated with `pip freeze > requirements.txt`
     ├── test-requirements.txt  <- The requirements file for the test environment
     │
-    ├── setup.py               <- makes project pip installable (pip install -e .) so demo_project can be imported
-    ├── demo_project    <- Source code for use in this project.
-    │   ├── __init__.py        <- Makes demo_project a Python module
+    ├── setup.py               <- makes project pip installable (pip install -e .) so lstm_test can be imported
+    ├── lstm_test    <- Source code for use in this project.
+    │   ├── __init__.py        <- Makes lstm_test a Python module
     │   │
     │   ├── dataset            <- Scripts to download or generate data
     │   │   └── make_dataset.py

@@ -7,15 +7,58 @@ import json
 import argparse
 import pkg_resources
 # import project's config.py
-import demo_project.config as cfg
+import lstm_test.config as cfg
 from aiohttp.web import HTTPBadRequest
 
 from functools import wraps
 
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
+
+
+
+# multivariate data preparation
+from numpy import array
+from numpy import hstack
+from keras.models import Sequential
+from keras.layers import LSTM
+from keras.layers import Dense
+import numpy as np
+import requests
 ## Authorization
 from flaat import Flaat
 flaat = Flaat()
 
+
+
+def mape(actual, pred): 
+    actual, pred = np.array(actual), np.array(pred)
+    return np.mean(np.abs((actual - pred) / actual)) * 100
+
+def compute_metrics_fn(y_valid_resc, y_hat_resc):
+    ## actual train and test values
+    mae_ = mean_absolute_error(y_valid_resc, y_hat_resc)
+    mse_ = mean_squared_error(y_valid_resc, y_hat_resc)
+    rmse_ = mean_squared_error(y_valid_resc, y_hat_resc, squared = False)
+    cvrmse_ = rmse_/np.mean(y_valid_resc)*100 # it is a percentage
+    mape_ = mape(y_valid_resc, y_hat_resc)
+    return mae_, mse_, rmse_, cvrmse_, mape_
+
+# split a multivariate sequence into samples
+def split_sequences(sequences, n_steps):
+	X, y = list(), list()
+	for i in range(len(sequences)):
+		# find the end of this pattern
+		end_ix = i + n_steps
+		# check if we are beyond the dataset
+		if end_ix > len(sequences)-1:
+			break
+		# gather input and output parts of the pattern
+		seq_x, seq_y = sequences[i:end_ix, :], sequences[end_ix, :]
+		X.append(seq_x)
+		y.append(seq_y)
+	return array(X), array(y)
 
 def _catch_error(f):
     """Decorate function to return an error as HTTPBadRequest, in case
@@ -64,7 +107,7 @@ def get_metadata():
     https://docs.deep-hybrid-datacloud.eu/projects/deepaas/en/latest/user/v2-api.html#deepaas.model.v2.base.BaseModel.get_metadata
     :return:
     """
-
+    print("entra aqui get metadata")
     module = __name__.split('.', 1)
 
     try:
@@ -82,13 +125,15 @@ def get_metadata():
     train_args = _fields_to_dict(get_train_args())
     # make 'type' JSON serializable
     for key, val in train_args.items():
+        print(key)
         train_args[key]['type'] = str(val['type'])
 
     ### One can include arguments for predict() in the metadata
     predict_args = _fields_to_dict(get_predict_args())
     # make 'type' JSON serializable
     for key, val in predict_args.items():
-        predict_args[key]['type'] = str(val['type'])
+       print(key)
+       predict_args[key]['type'] = str(val['type'])
 
     meta = {
         'name': None,
@@ -173,6 +218,7 @@ def get_train_args():
     :param kwargs:
     :return:
     """
+    
     return cfg.TrainArgsSchema().fields
 
 
@@ -181,7 +227,7 @@ def get_train_args():
 # Comment this line, if you open training for everybody
 # More info: see https://github.com/indigo-dc/flaat
 ###
-@flaat.login_required() # Allows only authorized people to train
+#@flaat.login_required() # Allows only authorized people to train
 def train(**kwargs):
     """
     Train network
@@ -189,7 +235,7 @@ def train(**kwargs):
     :param kwargs:
     :return:
     """
-
+    
     message = { "status": "ok",
                 "training": [],
               }
@@ -198,8 +244,12 @@ def train(**kwargs):
     schema = cfg.TrainArgsSchema()
     # deserialize key-word arguments
     train_args = schema.load(kwargs)
-    
-    # 1. implement your training here
+    print("PRINT THE TRAINING ARGUMENTS>> ", train_args)
+    the_url=train_args['urls']
+    r = requests.get(the_url, allow_redirects=True)
+    the_path='../dataset/train_file.csv'
+    open(the_path, 'wb').write(r.content)
+   # 1. implement your training here
     # 2. update "message"
     
     train_results = { "Error": "No model implemented for training (train())" }

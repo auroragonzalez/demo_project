@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-import demo_project.models.deep_api as deep_api
+import lstm_test.models.deep_api as deep_api
 
 class TestModelMethods(unittest.TestCase):
     
@@ -18,11 +18,11 @@ class TestModelMethods(unittest.TestCase):
         Test that get_metadata() returns right values (subset)
         """
         self.assertEqual(self.meta['name'].lower().replace('-','_'),
-                        'demo_project'.lower().replace('-','_'))
+                        'lstm_test'.lower().replace('-','_'))
         self.assertEqual(self.meta['author'].lower(),
-                         'Aurora Gonzalez-Vidal (UMU)'.lower())
+                         'Lara'.lower())
         self.assertEqual(self.meta['author-email'].lower(),
-                         'aurora.gonzalez2@um.es'.lower())
+                         'lloret@ifca.unican.es'.lower())
         self.assertEqual(self.meta['license'].lower(), 
                          'MIT'.lower())
 

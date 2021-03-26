@@ -10,10 +10,10 @@ pipeline {
     }
 
     environment {
-        author_name = "Aurora Gonzalez-Vidal (UMU)"
-        author_email = "aurora.gonzalez2@um.es"
-        app_name = "demo_project"
-        job_location = "Pipeline-as-code/DEEP-OC-org/DEEP-OC-demo_project/${env.BRANCH_NAME}"
+        author_name = "Lara"
+        author_email = "lloret@ifca.unican.es"
+        app_name = "lstm_test"
+        job_location = "Pipeline-as-code/DEEP-OC-org/DEEP-OC-lstm_test/${env.BRANCH_NAME}"
     }
 
     stages {

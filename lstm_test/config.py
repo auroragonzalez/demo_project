@@ -61,6 +61,13 @@ class TrainArgsSchema(Schema):
     class Meta:
         unknown = INCLUDE  # support 'full_paths' parameter
 
+    # to be able to provide an URL for prediction
+    urls = fields.Url(
+        required=False,
+        missing=None,
+        description="Provide an URL of the data for the training"
+    )
+
     # available fields are e.g. fields.Integer(), fields.Str(), fields.Boolean()
     # full list of fields: https://marshmallow.readthedocs.io/en/stable/api_reference.html
     arg1 = fields.Integer(

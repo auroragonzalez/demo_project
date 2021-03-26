@@ -6,7 +6,7 @@
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-import demo_project.config as cfg
+import lstm_test.config as cfg
 
 
 def main(input_filepath, output_filepath):

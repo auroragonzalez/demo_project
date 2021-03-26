@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Feature building
+Visualization
 """
-
 # import project config.py
-import demo_project.config as cfg
+import lstm_test.config as cfg
