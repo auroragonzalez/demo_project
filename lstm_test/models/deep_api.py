@@ -15,15 +15,15 @@ from functools import wraps
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
-
+import pandas as pd
 
 
 # multivariate data preparation
 from numpy import array
 from numpy import hstack
-from keras.models import Sequential
-from keras.layers import LSTM
-from keras.layers import Dense
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM
+from tensorflow.keras.layers import Dense
 import numpy as np
 import requests
 ## Authorization
@@ -100,24 +100,6 @@ def _fields_to_dict(fields_in):
         dict_out[key] = param
     return dict_out
 
-
-def split_sequences(sequences, n_steps):
-    """
-    Function to prepare the input of the neural network having n_steps as the number of observations that will be used in each multivariate series as an input of the model
-    :return:
-    """
-	X, y = list(), list()
-	for i in range(len(sequences)):
-		# find the end of this pattern
-		end_ix = i + n_steps
-		# check if we are beyond the dataset
-		if end_ix > len(sequences)-1:
-			break
-		# gather input and output parts of the pattern
-		seq_x, seq_y = sequences[i:end_ix, :], sequences[end_ix, :]
-		X.append(seq_x)
-		y.append(seq_y)
-	return array(X), array(y)
 
 def get_metadata():
     """
@@ -262,14 +244,18 @@ def train(**kwargs):
     schema = cfg.TrainArgsSchema()
     # deserialize key-word arguments
     train_args = schema.load(kwargs)
-    print("PRINT THE TRAINING ARGUMENTS>> ", train_args)
+    #print("PRINT THE TRAINING ARGUMENTS>> ", train_args)
     the_url=train_args['urls']
     r = requests.get(the_url, allow_redirects=True)
     the_path='../dataset/train_file.csv'
     open(the_path, 'wb').write(r.content)
-   # 1. implement your training here
+    # 1. implement your training here
+    print("Starting the training")
+    df = pd.read_csv(the_path, sep=",")
+    dataset = df.to_numpy()
+
     # 2. update "message"
-    
+
     train_results = { "Error": "No model implemented for training (train())" }
     message["training"].append(train_results)
 
